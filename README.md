@@ -16,7 +16,7 @@ Usage:
 python streamripper.py URL
 
 example :
-  ``python streamripper http://hotmixradio-rock.ice.infomaniak.ch/hotmixradio-rock-128.mp3 ``
+  ``python streamripper.py http://hotmixradio-rock.ice.infomaniak.ch/hotmixradio-rock-128.mp3 ``
 
 This command will record songs of the hotmixradio stream and place them in the current directory. 
 
