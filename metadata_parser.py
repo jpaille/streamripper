@@ -1,5 +1,8 @@
+import re
+
 from utils import convert_string
 from settings import metadata_parser
+
 
 class MetadataParser():
     @staticmethod
@@ -15,17 +18,5 @@ class HmrParser():
     """
     @staticmethod
     def parse(metadata):
-        metadata = metadata[13:] ## remove StreamTitle string
-        limit_end_artist = metadata.find(" - ")
-        if limit_end_artist == -1:
-            artist = None
-            title = None
-        else:
-            artist = metadata[:limit_end_artist]
-            limit_end_title = metadata.find("||")
-            title =  metadata[limit_end_artist + 3 : limit_end_title].strip()
-            title = convert_string(title)
-            artist = convert_string(artist)
-        return (artist, title)
-    
-    
+        group_dict = re.search(r"^StreamTitle='(?P<title>.+?) - (?P<artist>.+?) \|", metadata).groupdict()
+        return (group_dict["artist"], group_dict["title"]) if group_dict else (None, None)
