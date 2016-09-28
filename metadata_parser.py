@@ -1,8 +1,6 @@
 import re
 
-from utils import convert_string
 from settings import metadata_parser
-
 
 class MetadataParser():
     @staticmethod

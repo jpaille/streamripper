@@ -2,9 +2,9 @@
 
 import argparse
 from copy import deepcopy
-import requests
 import sys
 from threading import Thread
+import requests
 
 from metadata_parser import MetadataParser
 from song import Song
@@ -20,22 +20,21 @@ parser = argparse.ArgumentParser(description='Record radio streams.')
 parser.add_argument("url", metavar="URL", help="Radio stream URL.")
 parser.add_argument("-d", dest="base_directory", help="Select a different base directory for ripping.", default=".")
 parser.add_argument("--cut-begining", type=int, default=0,
-                        help="Number of seconds to cut at the begining.")
+                    help="Number of seconds to cut at the begining.")
 parser.add_argument("--cut-end", type=int, default=0,
-                        help="Number of seconds to cut at the end.")
+                    help="Number of seconds to cut at the end.")
 parser.add_argument("--min-song-duration", type=int, default=60,
-                        help="Minimum song duration in seconds.")
+                    help="Minimum song duration in seconds.")
 parser.add_argument("--record-first-song", action="store_true",
-                        help="""You will be probably starting recording at the middle of a song so the first song is usually incomplete.
-                                Use this option if you still want to record it.""")
+                    help="""You will be probably starting recording at the middle of a song so the first song
+                            is usually incomplete. Use this option if you still want to record it.""")
 parser.add_argument("-u", dest="user_agent", action="store_true", default="streamripper",
-                        help="""Use a different UserAgent than "Streamripper"
-                                In the http request, streamripper includes a string that identifies what
-                                kind of program is requesting the connection. By default it is the string
-                                "Streamripper". Here you can decide to identify yourself as a different
-                                agent if you like.""")
+                    help="""Use a different UserAgent than "Streamripper"
+                            In the http request, streamripper includes a string that identifies what
+                            kind of program is requesting the connection. By default it is the string
+                            "Streamripper". Here you can decide to identify yourself as a different
+                            agent if you like.""")
 args = parser.parse_args()
-
 
 
 def save_song(song):
@@ -46,7 +45,7 @@ def save_song(song):
 def build_header():
     """Build a custom header"""
     headers = {"User-Agent": args.user_agent,
-               'Icy-MetaData': 1 }
+               'Icy-MetaData': 1}
     return headers
 
 def get_metadata_length(stream):
@@ -61,7 +60,6 @@ def print_stream_info(stream):
     print "declared bitrate: {}".format(stream.headers['icy-br'])
     print "meta interval: {}".format(stream.headers['icy-metaint'])
 
-    
 if __name__ == "__main__":
     """Main recording loop. For more information on the shoutcast protocol, check this nice
        tutorial http://www.smackfu.com/stuff/programming/shoutcast.html"""
@@ -70,7 +68,7 @@ if __name__ == "__main__":
     stream = requests.get(args.url, stream=True,
                           headers=build_header())
     print_stream_info(stream)
-    
+
     block_size = int(stream.headers["icy-metaint"])
     byterate = int(stream.headers["icy-br"][:3]) * 1000 / 8
     song = None
@@ -92,7 +90,6 @@ if __name__ == "__main__":
                 song = Song(artist, title,
                             args.cut_begining, args.cut_end, args.min_song_duration,
                             byterate, args.base_directory, is_first_song) ## create a new song.
-                
             song.data += mp3_bytes
     except KeyboardInterrupt:
         sys.exit()

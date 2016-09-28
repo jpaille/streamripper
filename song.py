@@ -1,21 +1,22 @@
 import os
 
 from mutagen.mp3 import MP3
-from mutagen.id3 import ID3, APIC, TALB, error,  TPE1, TIT2
+from mutagen.id3 import ID3, error, TPE1, TIT2
 
 from utils import get_log_time
 
 class Song:
-    artist  = None
+    artist = None
     title = None
     filename = None
     full_path_song = None
     data = ""
-    
+
     def __init__(self, artist, title,
-                 cut_begining=0, cut_end=0, min_song_duration=60
-                 ,byterate = 1000, base_directory=".",
+                 cut_begining=0, cut_end=0, min_song_duration=60,
+                 byterate=1000, base_directory=".",
                  first_song=False):
+
         self.artist = artist
         self.title = title
         self.cut_begining = cut_begining
@@ -24,7 +25,6 @@ class Song:
         self.byterate = byterate
         self.base_directory = base_directory
         self.first_song = first_song
-
 
         if not self.artist and not self.title:
             print u"{} Skipping...".format(get_log_time())
@@ -40,7 +40,8 @@ class Song:
             print u"{} Skip song {} already exist.".format(get_log_time(), self.filename)
             return False
         elif self.first_song:
-            print u"{} Skip song {} may be incomplete because it's the first recorded .".format(get_log_time(), self.filename)
+            print u"{} Skip song {} may be incomplete because it's the first recorded .".format(get_log_time(),
+                                                                                                self.filename)
             return False
         elif self.get_length_in_seconds() < self.min_song_duration:
             print u"{} Skip song {} is under {} seconds.".format(get_log_time(), self.filename, self.min_song_duration)
@@ -85,4 +86,3 @@ class Song:
 
     def get_length_in_seconds(self):
         return len(self.data) / self.byterate
-
