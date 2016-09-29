@@ -1,1 +1,1 @@
-mutagen
+mutagen==1.34.1
