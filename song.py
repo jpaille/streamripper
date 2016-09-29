@@ -5,7 +5,7 @@ from mutagen.id3 import ID3, error, TPE1, TIT2
 
 from utils import get_log_time
 
-class Song:
+class Song(object):
     artist = None
     title = None
     filename = None

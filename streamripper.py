@@ -6,13 +6,14 @@ import sys
 from threading import Thread
 import requests
 
-from metadata_parser import MetadataParser
+from metadata_parser import metadata_parsers
+from settings import radio_parser_style
 from song import Song
 from utils import get_log_time
 
 class NoDataReceivedError(Exception):
-    """ Exception raised when request.raw.read() returns
-        an empty string.
+    """Exception raised when request.raw.read() returns
+       an empty string.
     """
     pass
 
@@ -86,7 +87,7 @@ if __name__ == "__main__":
                 if song:
                     save_song(song) ## save the current song.
                     is_first_song = False
-                artist, title = MetadataParser.parse(stream.raw.read(metadata_length))
+                artist, title = metadata_parsers[radio_parser_style]().parse(stream.raw.read(metadata_length))
                 song = Song(artist, title,
                             args.cut_begining, args.cut_end, args.min_song_duration,
                             byterate, args.base_directory, is_first_song) ## create a new song.

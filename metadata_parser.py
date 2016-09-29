@@ -1,20 +1,26 @@
 import re
 
-from settings import metadata_parser
+class MetadataParser(object):
 
-class MetadataParser():
-    @staticmethod
-    def parse(metadata):
-        """Returns a tuple (artist, title)."""
-        if metadata_parser == "HmrParser":
-            return HmrParser.parse(metadata)
+    def parse(self, metadata):
+        """
+        Parse stream metadata.
 
-class HmrParser():
+        Args:
+            metadata (str)
+
+        Returns:
+            A tuple (Artist (str), Title (str)) if found. Returns (None, None) otherwise.
+        """
+        raise NotImplementedError
+
+class HotmixradioParser(MetadataParser):
     """Parser for hotmix radio style metadata.
-
-       Metadata :  "StreamTitle='title of the song - artist ||'
+       Hotmixradio metadata format is "StreamTitle='title of the song - artist ||'.
     """
-    @staticmethod
-    def parse(metadata):
+
+    def parse(self, metadata):
         group_dict = re.search(r"^StreamTitle='(?P<title>.+?) - (?P<artist>.+?) \|", metadata).groupdict()
         return (group_dict["artist"], group_dict["title"]) if group_dict else (None, None)
+
+metadata_parsers = {"Hotmixradio" : HotmixradioParser}
